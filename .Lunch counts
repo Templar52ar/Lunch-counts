@@ -1,0 +1,90 @@
+import datetime
+
+# Dictionary to store daily lunch counts
+daily_counts = {}
+
+def record_daily_count(date, count):
+    """
+    Record daily lunch count.
+    """
+    daily_counts[date] = count
+
+def get_total_count():
+    """
+    Get the total lunch count for all days.
+    """
+    return sum(daily_counts.values())
+
+# Example usage:
+today = datetime.date.today()
+record_daily_count(today, 50)  # Assume 50 students for today
+
+# Print total count
+print("Total lunch count for all days:", get_total_count())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import datetime
+import openpyxl
+
+# Dictionary to store daily lunch counts for teachers
+daily_counts = {}
+
+def record_daily_count(teacher_name, date, count):
+    """
+    Record daily lunch count for a specific teacher.
+    """
+    if teacher_name not in daily_counts:
+        daily_counts[teacher_name] = {}
+    daily_counts[teacher_name][date] = count
+
+def get_total_count(teacher_name):
+    """
+    Get the total lunch count for a specific teacher for all days.
+    """
+    if teacher_name in daily_counts:
+        return sum(daily_counts[teacher_name].values())
+    else:
+        return 0
+
+def export_to_spreadsheet(file_path):
+    """
+    Export lunch counts data to a spreadsheet.
+    """
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    # Write header
+    ws.append(["Teacher Name", "Date", "Lunch Count"])
+
+    # Write data
+    for teacher_name, dates_counts in daily_counts.items():
+        for date, count in dates_counts.items():
+            ws.append([teacher_name, date, count])
+
+    # Save the workbook
+    wb.save(file_path)
+
+# Example usage:
+today = datetime.date.today()
+teacher_name = "Mr. Smith"
+record_daily_count(teacher_name, today, 2)  # Assume 2 students for Mr. Smith's class today
+
+# Print total count for Mr. Smith
+print(f"Total lunch count for {teacher_name} for all days:", get_total_count(teacher_name))
+
+# Export data to a spreadsheet
+export_to_spreadsheet("lunch_counts.xlsx")
+
